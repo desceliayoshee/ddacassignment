@@ -61,6 +61,14 @@ namespace ddacassignment.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required(ErrorMessage = "Must key in your full name before submit the form!")]
+            [StringLength(200, ErrorMessage ="You must key in with minimum 5 chars and max 200 chars!", MinimumLength =5)]
+            [Display(Name ="User Full Name")]
+            public string User_Full_Name { get; set; }
+
+            [Required]
+            public string Address { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -75,7 +83,12 @@ namespace ddacassignment.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ddacassignmentUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ddacassignmentUser 
+                { UserName = Input.Email, 
+                  Email = Input.Email,
+                  User_Full_Name = Input.User_Full_Name,
+                  Address = Input.Address,
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
