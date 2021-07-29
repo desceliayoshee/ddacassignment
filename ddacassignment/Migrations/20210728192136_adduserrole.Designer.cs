@@ -10,7 +10,7 @@ using ddacassignment.Data;
 namespace ddacassignment.Migrations
 {
     [DbContext(typeof(ddacassignmentContext))]
-    [Migration("20210729052341_adduserrole")]
+    [Migration("20210728192136_adduserrole")]
     partial class adduserrole
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
