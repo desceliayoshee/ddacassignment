@@ -97,13 +97,7 @@ namespace ddacassignment.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ddacassignmentUser 
-                { UserName = Input.Email, 
-                  Email = Input.Email,
-                  User_Full_Name = Input.User_Full_Name,
-                  Address = Input.Address,
-                  userrole = Input.userrole,
-                };
+                
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

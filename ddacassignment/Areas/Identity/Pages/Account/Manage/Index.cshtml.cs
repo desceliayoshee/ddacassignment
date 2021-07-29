@@ -31,14 +31,18 @@ namespace ddacassignment.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public class InputModel
+        public class InputModel //form structure
         {
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Required]
+            [Display(Name = "Your Address")]
+            public string Address { get; set; }
         }
 
-        private async Task LoadAsync(ddacassignmentUser user)
+        private async Task LoadAsync(ddacassignmentUser user) //first load - view currect data from database
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
@@ -47,7 +51,8 @@ namespace ddacassignment.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber, //column refer to which table column
+                Address = user.Address
             };
         }
 
@@ -87,6 +92,12 @@ namespace ddacassignment.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            if (Input.Address != user.Address)
+            {
+                user.Address = Input.Address;
+            }
+            await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
