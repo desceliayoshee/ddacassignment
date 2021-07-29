@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ddacassignment.Areas.Identity.Pages.Account
 {
@@ -69,6 +70,7 @@ namespace ddacassignment.Areas.Identity.Pages.Account
 
             [Required]
             public string Address { get; set; }
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -88,6 +90,7 @@ namespace ddacassignment.Areas.Identity.Pages.Account
                   Email = Input.Email,
                   User_Full_Name = Input.User_Full_Name,
                   Address = Input.Address,
+             
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ddacassignment.Data;
 
 namespace ddacassignment.Migrations
 {
     [DbContext(typeof(ddacassignmentContext))]
-    partial class ddacassignmentContextModelSnapshot : ModelSnapshot
+    [Migration("20210728192136_adduserrole")]
+    partial class adduserrole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
