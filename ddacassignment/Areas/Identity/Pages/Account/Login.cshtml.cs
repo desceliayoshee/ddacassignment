@@ -94,11 +94,11 @@ namespace ddacassignment.Areas.Identity.Pages.Account
                         if (String.IsNullOrEmpty(userrole))
                             return RedirectToAction("Privacy", "Home");
                         else if (userrole.Equals("Manager"))
-                            return RedirectToAction("Privacy", "Home");
-                        else if (userrole.Equals("Customer"))
                             return RedirectToAction("Index", "Home");
-                        else if (userrole.Equals("Staff"))
+                        else if (userrole.Equals("Customer"))
                             return RedirectToAction("Privacy", "Home");
+                        else if (userrole.Equals("Staff"))
+                            return RedirectToAction("Index", "Home");
                     }
                 }
                 if (result.RequiresTwoFactor)
