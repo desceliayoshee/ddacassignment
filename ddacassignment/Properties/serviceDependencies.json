@@ -3,6 +3,14 @@
     "mssql1": {
       "type": "mssql",
       "connectionId": "ddacassignmentContextConnection"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ddacassignmentNewContext"
+    },
+    "mssql3": {
+      "type": "mssql",
+      "connectionId": "ddacassignmentNew2Context"
     }
   }
 }

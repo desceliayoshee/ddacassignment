@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using ddacassignment.Data;
 
 namespace ddacassignment
 {
@@ -25,6 +27,12 @@ namespace ddacassignment
 		{
 			services.AddControllersWithViews();
 			services.AddRazorPages();
+
+		    services.AddDbContext<ddacassignmentNewContext>(options =>
+		            options.UseSqlServer(Configuration.GetConnectionString("ddacassignmentNewContext")));
+
+		    services.AddDbContext<ddacassignmentNew2Context>(options =>
+		            options.UseSqlServer(Configuration.GetConnectionString("ddacassignmentNew2Context")));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
