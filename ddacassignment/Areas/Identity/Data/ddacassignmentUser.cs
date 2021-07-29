@@ -14,5 +14,8 @@ namespace ddacassignment.Areas.Identity.Data
 
         [PersonalData]
         public string Address { get; set; }
+
+        [PersonalData]
+        public string userrole { get; set; }
     }
 }
