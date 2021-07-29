@@ -206,6 +206,12 @@ namespace ddacassignment.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
+                    b.Property<string>("User_Full_Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("userrole")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
