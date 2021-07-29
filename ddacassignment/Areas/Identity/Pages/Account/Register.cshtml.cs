@@ -37,6 +37,16 @@ namespace ddacassignment.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
         }
+        public SelectList RoleSelectList = new SelectList(
+            new List<SelectListItem>
+            {
+                new SelectListItem {Selected = true, Text = "Select Role", Value = ""},
+                new SelectListItem {Selected = false, Text = "Manager", Value = "Manager"},
+                new SelectListItem {Selected = false, Text = "Customer", Value = "Customer"},
+                new SelectListItem {Selected = false, Text = "Staff", Value = "Staff"},
+
+            }, "Value", "Text", 1);
+
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -71,6 +81,8 @@ namespace ddacassignment.Areas.Identity.Pages.Account
             [Required]
             public string Address { get; set; }
 
+            [Display(Name = "What is your role?")]
+            public string userrole { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -85,13 +97,15 @@ namespace ddacassignment.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ddacassignmentUser 
-                { UserName = Input.Email, 
-                  Email = Input.Email,
-                  User_Full_Name = Input.User_Full_Name,
-                  Address = Input.Address,
-             
+                var user = new ddacassignmentUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    User_Full_Name = Input.User_Full_Name,
+                    Address = Input.Address,
+                    userrole = Input.userrole,
                 };
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
