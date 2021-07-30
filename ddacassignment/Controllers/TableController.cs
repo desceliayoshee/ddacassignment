@@ -13,7 +13,7 @@ namespace ddacassignment.Controllers
 {
     public class TableController : Controller
     {
-        public IActionResult AddSingleEntity(string PartitionKey, string RowKey, DateTime Schedule, decimal price)
+        public IActionResult AddSingleEntity(string PartitionKey, string RowKey, DateTime Schedule, double price)
         {
 
             //refer to the table 
@@ -22,6 +22,7 @@ namespace ddacassignment.Controllers
             ServicesEntity service1 = new ServicesEntity(PartitionKey, RowKey);
             service1.Schedule = Schedule;
             service1.Price = price;
+
 
             try
             {

@@ -10,14 +10,12 @@ namespace ddacassignment.Models
     {
         public ServicesEntity(String id, string services)
         {
-            this.PartitionKey = id;
-            this.RowKey = services;
+            this.PartitionKey = services;
+            this.RowKey = id;
         }
-
-        public ServicesEntity() { }
        
         public DateTime Schedule { get; set; }
-        public decimal Price { get; set; }
+        public double Price { get; set; }
 
     }
 }
