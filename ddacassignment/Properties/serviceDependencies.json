@@ -4,9 +4,8 @@
       "type": "mssql",
       "connectionId": "ddacassignmentContextConnection"
     },
-    "mssql2": {
-      "type": "mssql",
-      "connectionId": "ddacassignmentNewContext"
+    "secrets1": {
+      "type": "secrets"
     },
     "mssql3": {
       "type": "mssql",

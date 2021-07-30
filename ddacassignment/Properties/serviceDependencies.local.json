@@ -4,9 +4,8 @@
       "type": "mssql.local",
       "connectionId": "ddacassignmentContextConnection"
     },
-    "mssql2": {
-      "type": "mssql.local",
-      "connectionId": "ddacassignmentNewContext"
+    "secrets1": {
+      "type": "secrets.user"
     },
     "mssql3": {
       "type": "mssql.local",
