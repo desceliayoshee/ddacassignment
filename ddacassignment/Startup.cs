@@ -29,12 +29,18 @@ namespace ddacassignment
 		{
 			services.AddControllersWithViews();
 			services.AddRazorPages();
+
+public void ConfigureServices(IServiceCollection services)
+		{
+			services.AddControllersWithViews();
+			services.AddRazorPages();
             services.AddAzureClients(builder =>
             {
                 builder.AddBlobServiceClient(Configuration["ConnectionStrings:ddacassignmentstore:blob"], preferMsi: true);
                 builder.AddQueueServiceClient(Configuration["ConnectionStrings:ddacassignmentstore:queue"], preferMsi: true);
             });
         }
+
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
