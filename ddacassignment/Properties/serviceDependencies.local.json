@@ -4,13 +4,14 @@
       "type": "mssql.local",
       "connectionId": "ddacassignmentContextConnection"
     },
-    "mssql2": {
-      "type": "mssql.local",
-      "connectionId": "ddacassignmentNewContext"
+    "secrets1": {
+      "type": "secrets.user"
     },
-    "mssql3": {
-      "type": "mssql.local",
-      "connectionId": "ddacassignmentNew2Context"
+    "storage1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/ddacassignmentstore",
+      "type": "storage.azure",
+      "connectionId": "ddacassignmentstore",
+      "secretStore": "LocalSecretsFile"
     }
   }
 }

@@ -4,6 +4,10 @@
 @inject SignInManager<ddacassignmentUser> SignInManager
 @inject UserManager<ddacassignmentUser> UserManager
 
+@{ 
+    var user = await UserManager.GetUserAsync(User);
+}
+
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
@@ -18,9 +22,29 @@
                 <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
             </form>
         </li>
-        <li class="nav-item">
-            <a id="manage" class="nav-link text-dark" asp-controller="Home" asp-action="privacy" title="Manage">Privacy</a>
-        </li>
+
+        @if (user.userrole.Equals("Manager"))
+        {
+
+
+
+        }
+        @if (user.userrole.Equals("Customer"))
+        {
+
+            <li class="nav-item">
+                <a id="manage" class="nav-link text-dark" asp-controller="Home" asp-action="privacy" title="Manage">Privacy</a>
+            </li>
+
+        }
+        @if (user.userrole.Equals("Staff"))
+        {
+
+
+
+        }
+
+
     }
     else
     {
