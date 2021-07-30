@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewData["Title"] = "SearchPage";
+}
+
+<h1>Search Schedule</h1>
+
+<center>
+    <form method="get" action="getsingleentity">
+        <p>
+            Search Service: <input type="text" value="" name="PartitionKey" required />
+        </p>
+        <p>
+            Search Company: <input type="text" value="" name="RowKey" required />
+        </p>
+        <p><input type="submit" value="Search" name="submit" /></p>
+    </form>
+</center>
+
+@if (ViewBag.msg != null) //use during the section when no data was found from table
+ {
+    <script>alert("@ViewBag.msg");</script>
+ }
+
+

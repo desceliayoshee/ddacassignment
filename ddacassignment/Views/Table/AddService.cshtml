@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ddacassignment.Models.ServicesEntity>
+@{
+    ViewData["Title"] = "AddService";
+}
+
+<h1>View Service Table</h1>
+
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+}
+else
+{
+    <table border="1">
+        <tr>
+            <th>Service Name</th>
+            <th>Service Company</th>
+            <th>Service Schedule</th>
+            <th>Service Price</th>
+            <th> Action </th>
+            <th> Action </th>
+        </tr>
+        @foreach (var service in Model)
+                {
+    <tr>
+        <td>@service.PartitionKey</td>
+        <td>@service.RowKey</td>
+        <td>@service.Schedule</td>
+        <td>@service.Price</td>
+
+        <td>
+            <a asp-route-pkey="@service.PartitionKey" asp-route-rkey="@service.RowKey" asp-action="deletedata" asp-controller="Table">
+                <button>Delete Service</button>
+            </a>
+        </td>
+        <td>
+            <a asp-route-pkey="@service.PartitionKey" asp-route-rkey="@service.RowKey" asp-action="editdata" asp-controller="Table">
+                <button>Edit Service</button>
+            </a>
+        </td>
+    </tr>
+                }
+    </table>
+}

@@ -13,7 +13,7 @@ namespace ddacassignment.Controllers
 {
     public class TableController : Controller
     {
-        public IActionResult AddSingleEntity(string PartitionKey, string RowKey, DateTime Schedule, decimal price)
+        public IActionResult AddSingleEntity(string PartitionKey, string RowKey, DateTime Schedule, double price)
         {
 
             //refer to the table 
@@ -68,12 +68,172 @@ namespace ddacassignment.Controllers
             return View();
         }
 
+        //to table
+        public ActionResult AddService()
+        {
+            CloudTable table = getTableStorageInformation();
+            CreateTable();
+
+            string errormessage = null;
+
+            //display all info 
+            try
+            {
+                //create query
+                TableQuery<ServicesEntity> query = new TableQuery<ServicesEntity>();
+
+                List<ServicesEntity> services = new List<ServicesEntity>();
+                TableContinuationToken token = null; //to identify if there is still more data
+                do
+                {
+                    TableQuerySegment<ServicesEntity> result = table.ExecuteQuerySegmentedAsync(query, token).Result;
+                    token = result.ContinuationToken;
+
+                    foreach (ServicesEntity service in result.Results)
+                    {
+                        services.Add(service);
+                    }
+                }
+                while (token != null); //token not empty; continue read data
+                if (services.Count != 0)
+                {
+                    return View(services); //back to display
+                }
+                else
+                {
+                    errormessage = "Data not Found";
+                    return RedirectToAction("AddService", "Table", new { dialogmsg = errormessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.msg = "Technical error: " + ex.ToString();
+            }
+            return View();
+        }
+
+        //delete data 
+        public ActionResult deletedata(string pkey, string rkey)
+        {
+            string message = null;
+            CloudTable table = getTableStorageInformation();
+            try
+            {
+                ServicesEntity services1 = new ServicesEntity(pkey, rkey) { ETag = "*" };
+                TableOperation deletemethod = TableOperation.Delete(services1);
+                table.ExecuteAsync(deletemethod);
+                message = "The service" + pkey + "of" + rkey + "has been deleted";
+                ViewBag.message = message;
+            }
+            catch(Exception ex)
+            {
+                message = "Technical errors" + ex.ToString();
+            }
+            return RedirectToAction("AddService", "Table", new { Message = message });
+        }
+
+        //edit data
+        public ActionResult editdata(string pkey, string rkey)
+        {
+            string message = null;
+            CloudTable table = getTableStorageInformation();
+
+            try
+            {
+                TableOperation retrieveOperation = TableOperation.Retrieve<ServicesEntity>(pkey, rkey);
+                TableResult tableResult = table.ExecuteAsync(retrieveOperation).Result; //come together ETag
+                if (tableResult.Etag != null)
+                {
+                    var customer = tableResult.Result as ServicesEntity;
+                    return View(customer);
+                }
+                else
+                {
+                    message = "No such service in the list";
+                }
+            }
+            catch (Exception e)
+            {
+                message = "Technical error:" + e.ToString();
+            }
+
+            return RedirectToAction("AddService", "Table", new { Message = message });
+        }
+
+        //edit data from the save button
+        [HttpPost]
+        public ActionResult editdata([Bind("PartitionKey", "RowKey", "Schedule", "Price")] ServicesEntity serv)
+        {
+            ServicesEntity service3 = new ServicesEntity();
+            DateTime Schedule = service3.Schedule;
+            double Price = service3.Price;
+
+            string message = null;
+            CloudTable table = getTableStorageInformation();
+            if (ModelState.IsValid)
+            {
+                serv.ETag = "*";
+                try
+                {
+
+                    TableOperation updateoperation = TableOperation.Replace(serv);
+                    table.ExecuteAsync(updateoperation);
+                    message = "The Service Information " + serv.PartitionKey + "" + serv.RowKey + " has been updated";
+
+                }
+                catch (Exception ex)
+                {
+                    message = "Unable to update the data. Error: " + ex.ToString();
+                }
+
+            }
+            else
+            {
+                return View(serv);
+            }
+
+            return RedirectToAction("AddService", "Table", new { Message = message });
+            //return View();
+        }
         // create form to insert service details from AddSingleEntity
         public ActionResult InsertForm()
         {
 
             return View();
         }
+        //search page 
+        public ActionResult SearchPage(String Message = null)
+        {
+            ViewBag.msg = Message;
+            return View();
+        }
+
+        //how to search customer information from table
+        public ActionResult getsingleentity(string PartitionKey, string RowKey)
+        {
+            string message = null;
+            CloudTable table = getTableStorageInformation();
+
+            try
+            {
+                TableOperation retrieveOperation = TableOperation.Retrieve<ServicesEntity>(PartitionKey, RowKey);
+                TableResult tableResult = table.ExecuteAsync(retrieveOperation).Result; //come together ETag
+                if(tableResult.Etag != null )
+                {
+                    var customer = tableResult.Result as ServicesEntity;
+                    return View(customer);
+                }else
+                {
+                    message = "No such service in the list";
+                }
+            } catch (Exception e)
+            {
+                message = "Technical error:" + e.ToString();
+            }
+
+            return RedirectToAction("SearchPage", "Table", new { Message = message});
+        }
+        
 
     }
 }
