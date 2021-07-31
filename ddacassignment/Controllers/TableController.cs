@@ -233,7 +233,51 @@ namespace ddacassignment.Controllers
 
             return RedirectToAction("SearchPage", "Table", new { Message = message});
         }
-        
+
+        // to display all service (customer)
+        public ActionResult ViewService(string PartitionKey, string RowKey)
+        {
+            CloudTable table = getTableStorageInformation();
+            CreateTable();
+
+            string errormessage = null;
+
+            //display all info 
+            try
+            {
+                //create query
+                TableQuery<ServicesEntity> query = new TableQuery<ServicesEntity>();
+
+                List<ServicesEntity> services = new List<ServicesEntity>();
+                TableContinuationToken token = null; //to identify if there is still more data
+                do
+                {
+                    TableQuerySegment<ServicesEntity> result = table.ExecuteQuerySegmentedAsync(query, token).Result;
+                    token = result.ContinuationToken;
+
+                    foreach (ServicesEntity service in result.Results)
+                    {
+                        services.Add(service);
+                    }
+                }
+                while (token != null); //token not empty; continue read data
+                if (services.Count != 0)
+                {
+                    return View(services); //back to display
+                }
+                else
+                {
+                    errormessage = "Data not Found";
+                    return RedirectToAction("AddService", "Table", new { dialogmsg = errormessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.msg = "Technical error: " + ex.ToString();
+            }
+            return View();
+        }
+
 
     }
 }
