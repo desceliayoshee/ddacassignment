@@ -8,13 +8,14 @@ namespace ddacassignment.Models
 {
     public class ServicesEntity : TableEntity
     {
-        public ServicesEntity(String id, string services)
+        public ServicesEntity() { }
+        public ServicesEntity(String service , string company)
         {
-            this.PartitionKey = id;
-            this.RowKey = services;
+            this.PartitionKey = service;
+            this.RowKey = company;
         }
 
-        public ServicesEntity() { }
+        
        
         public DateTime Schedule { get; set; }
         public double Price { get; set; }
@@ -22,5 +23,7 @@ namespace ddacassignment.Models
         public string customerUsername { get; set; }
 
         public bool isBooked { get; set; }
+
+        public bool isConfirmed { get; set; }
     }
 }

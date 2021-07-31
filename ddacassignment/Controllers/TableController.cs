@@ -15,7 +15,7 @@ namespace ddacassignment.Controllers
 {
     public class TableController : Controller
     {
-        public IActionResult AddSingleEntity(string PartitionKey, string RowKey, DateTime Schedule, double price)
+        public IActionResult AddSingleEntity(string PartitionKey, string RowKey, DateTime Schedule, double price, String customerUsername, bool isbooked, bool isconfirmed)
         {
 
             //refer to the table 
@@ -24,6 +24,10 @@ namespace ddacassignment.Controllers
             ServicesEntity service1 = new ServicesEntity(PartitionKey, RowKey);
             service1.Schedule = Schedule;
             service1.Price = price;
+            service1.customerUsername = "something";
+            service1.isBooked= false;
+            service1.isConfirmed = false;
+
 
             try
             {

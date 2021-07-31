@@ -23,7 +23,12 @@
             </form>
         </li>
 
-        
+        @if (user.userrole == "Customer")
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="bookdata">Bookings</a>
+            </li>
+        }
 
 
     }
