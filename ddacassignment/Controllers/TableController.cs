@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using ddacassignment.Areas.Identity.Data;
 
 namespace ddacassignment.Controllers
 {
@@ -233,7 +235,51 @@ namespace ddacassignment.Controllers
 
             return RedirectToAction("SearchPage", "Table", new { Message = message});
         }
-        
+
+        private UserManager<ddacassignmentUser> userManager;
+
+        public TableController(UserManager<ddacassignmentUser> usrMan)
+        {
+            userManager = usrMan;
+        }
+        //book 
+        public ActionResult bookdata(string PartitionKey, string RowKey)
+        {
+            CloudTable table = getTableStorageInformation();
+            string errormessage = null;
+
+            //get current username 
+            var myusername = this.userManager.GetUserName(HttpContext.User);
+            try
+            {
+                TableOperation retrieveOperation = TableOperation.Retrieve<ServicesEntity>(PartitionKey, RowKey);
+
+                //Execute the operation
+                TableResult result = table.ExecuteAsync(retrieveOperation).Result;
+
+                //asign the result to item objct
+                ServicesEntity updateEntity = (ServicesEntity)result.Result;
+
+                //change the description 
+                updateEntity.isBooked = true;
+                updateEntity.customerUsername = myusername;
+
+                //create the inssertorreplace tableoperation
+                TableOperation insertorReplaceOperation = TableOperation.InsertOrReplace(updateEntity);
+
+                //execute the operation
+                TableResult resultof = table.ExecuteAsync(insertorReplaceOperation).Result;
+                ViewBag.Result = result.HttpStatusCode;
+                return View(resultof);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.msg = "Technical Error: " + ex.ToString();
+            }
+            ViewBag.msg = errormessage;
+
+            return View();
+        }
 
     }
 }

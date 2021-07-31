@@ -18,7 +18,11 @@
         <td>@Model.RowKey</td>
         <td>@Model.Schedule</td>
         <td>@Model.Price</td>
-        <td><a><button>Book</button></a></td>
+        <td>
+            <a asp-route-pkey="@Model.PartitionKey" asp-route-rkey="@Model.RowKey" asp-action="bookdata" asp-controller="Table">
+                <button>Book</button>
+            </a>
+        </td>
     </tr>
 </table>
 
