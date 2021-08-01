@@ -16,6 +16,7 @@ namespace ddacassignment.Controllers
 {
     public class TableController : Controller
     {
+        private UserManager<ddacassignmentUser> userManager;
         public IActionResult AddSingleEntity(string PartitionKey, string RowKey, DateTime Schedule, double price, String customerUsername, bool isbooked, bool isconfirmed)
         {
 
@@ -75,15 +76,15 @@ namespace ddacassignment.Controllers
             return View();
         }
 
-        //public ActionResult CreateJobTable()
-        //{
+        public ActionResult CreateJobTable()
+        {
 
-        //    //refer to the container
-        //    CloudTable table = getTableStorageInformation();
-        //    ViewBag.Success = table.CreateIfNotExistsAsync().Result;
-        //    ViewBag.TableName = table.Name;
-        //    return View();
-        //}
+            //refer to the container
+            CloudTable table = getTableStorageInformation();
+            ViewBag.Success = table.CreateIfNotExistsAsync().Result;
+            ViewBag.TableName = table.Name;
+            return View();
+        }
 
         //public void CreateJobContainer()
         //{
@@ -266,8 +267,6 @@ namespace ddacassignment.Controllers
 
             return RedirectToAction("SearchPage", "Table", new { Message = message});
         }
-
-        private UserManager<ddacassignmentUser> userManager;
 
         public TableController(UserManager<ddacassignmentUser> usrMan)
         {
@@ -548,80 +547,177 @@ namespace ddacassignment.Controllers
 
         }
 
-        //public ActionResult viewAllJobs(string dialogmsg = null)
+        public ActionResult viewAllBooked(string dialogmsg = null)
+        {
+            ViewBag.msg = dialogmsg;
+
+            CloudTable table = getTableStorageInformation();
+            CreateTable();
+
+            string errormessage = null;
+
+            //get current username
+            var myusername = this.userManager.GetUserName(HttpContext.User);
+
+            //diaplay all  the data information in a table
+            try
+            {
+                //create query
+                TableQuery<ServicesEntity> query = new TableQuery<ServicesEntity>()
+                    .Where(TableQuery.CombineFilters(TableQuery.GenerateFilterConditionForBool("isBooked", QueryComparisons.Equal, true), TableOperators.And, TableQuery.GenerateFilterConditionForBool("isConfirmed", QueryComparisons.Equal, true)));
+
+                List<ServicesEntity> booklist = new List<ServicesEntity>();
+                TableContinuationToken token = null; //to identify if there is still more data
+                do
+                {
+                    TableQuerySegment<ServicesEntity> result = table.ExecuteQuerySegmentedAsync(query, token).Result;
+                    token = result.ContinuationToken;
+
+                    foreach (ServicesEntity slot in result.Results)
+                    {
+                        booklist.Add(slot);
+                    }
+                }
+                while (token != null); //token not emplty; continue read data
+
+                if (booklist.Count != 0)
+                {
+                    return View(booklist); //back to display
+
+                }
+                else
+                {
+                    //ViewBag.msg = "You have no bookingd yet";
+                    errormessage = "No  booked slots ";
+                    return RedirectToAction("Index", "Home", new { dialogmsg = errormessage });
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.msg = "Technical Error: " + ex.ToString();
+                errormessage = "No  booked slots ";
+                return RedirectToAction("Index", "Home", new { dialogmsg = errormessage });
+            }
+
+            ViewBag.msg = dialogmsg;
+            errormessage = "No  booked slots ";
+            return RedirectToAction("Index", "Home", new { dialogmsg = errormessage });
+
+        }
+
+        //private CloudBlobContainer getBlobStorageInformation()
         //{
-        //    var userid = this.userManager.GetUserName(HttpContext.User);
-        //    CleaningServiceUser user = userManager.FindByEmailAsync(userid).Result;
-        //    string useremail = user.Email;
-        //    ViewBag.msg = dialogmsg;
-        //    //container information
-        //    CloudBlobContainer container = getBlobStorageInformation();
+        //    //step 1: read json
+        //    var builder = new ConfigurationBuilder()
+        //    .SetBasePath(Directory.GetCurrentDirectory())
+        //    .AddJsonFile("appsettings.json");
+        //    IConfigurationRoot configure = builder.Build();
 
-        //    //table information
-        //    CloudTable table = getStorageInformation();
+        //    //to get key access
+        //    //once link, time to read the content to get the connectionstring
+        //    CloudStorageAccount objectaccount = CloudStorageAccount.Parse(configure["ConnectionStrings:storageconnection"]);
 
-        //    CreateJobContainer();
-        //    CreateTable();
-
-        //    //create listing for your blob
-        //    List<string> blobs = new List<string>();
-        //    List<Job> jobs = new List<Job>();
-        //    TableContinuationToken token = null; //to identify if there is still more data
-
-        //    //start reading  the contents
-        //    BlobResultSegment result = container.ListBlobsSegmentedAsync(null).Result;
-
-        //    foreach (IListBlobItem item in result.Results)
-        //    {
-        //        //step 4.1. check the type of the blob : block blob or directory or page block
-        //        if (item.GetType() == typeof(CloudBlockBlob))
-        //        {
-        //            CloudBlockBlob singleblob = (CloudBlockBlob)item;
-        //            try
-        //            {
-        //                List<Job> alljobs = new List<Job>();
-        //                TableQuery<Job> query = new TableQuery<Job>()
-        //                    .Where(TableQuery.CombineFilters(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, useremail),
-        //                    TableOperators.And,
-        //                          TableQuery.GenerateFilterCondition("imagefilename", QueryComparisons.Equal, singleblob.Name)));
-
-        //                TableQuerySegment<Job> jobResult = table.ExecuteQuerySegmentedAsync(query, token).Result;
-        //                token = jobResult.ContinuationToken;
+        //    //give info about the appsetting.json and read connection string
+        //    CloudBlobClient blobclient = objectaccount.CreateCloudBlobClient();
 
 
+        //    //step 2: how to create a new container in the blob storage account.
+        //    CloudBlobContainer container = blobclient.GetContainerReference("jonreport");
 
-
-        //                foreach (Job job in jobResult.Results)
-        //                {
-        //                    alljobs.Add(job);
-        //                }
-        //                Job rev = alljobs.First();
-
-        //                rev.imagefilename = singleblob.Name + "#" + singleblob.Uri.ToString();
-
-        //                jobs.Add(rev);
-
-        //            }
-        //            catch (Exception ex)
-        //            {
-
-        //                ViewBag.msg = "Technical Error: " + ex.ToString();
-        //            }
-        //        }
-        //    }
-        //    if (jobs.Count != 0)
-        //    {
-        //        return View(jobs); //back to display
-
-        //    }
-        //    else
-        //    {
-        //        dialogmsg = "Data not found!";
-        //        return RedirectToAction("AddJobEntity", "JobReport");
-
-        //    }
+        //    return container;
 
         //}
+        //public void CreateJobContainer()
+        //{
+        //    //step 1:call the getBlobStroageInforemation() method  to link with the account
+        //    //refer to the container
+        //    CloudBlobContainer container = getBlobStorageInformation();
+
+        //    //Step 2 : create the contaier if the system found that the name doest exist
+        //    var Success = container.CreateIfNotExistsAsync().Result;
+
+        //    //step 3: collect the container name to display in the frontend
+        //    var BlobContainerName = container.Name;
+
+        //    //4: moodifty view and display the result to the user
+        //    //return View();
+        //}
+
+        public ActionResult viewAllJobs(string dialogmsg = null)
+        {
+            var userid = this.userManager.GetUserName(HttpContext.User);
+            ddacassignmentUser user = userManager.FindByEmailAsync(userid).Result;
+            string useremail = user.Email;
+            ViewBag.msg = dialogmsg;
+            //CloudBlobContainer container = getBlobStorageInformation();
+            //table information
+            CloudTable table = getTableStorageInformation();
+
+            //CreateJobContainer();
+            CreateTable();
+
+            //create listing for your blob
+            List<string> blobs = new List<string>();
+            List<ServicesEntity> jobs = new List<ServicesEntity>();
+            TableContinuationToken token = null; //to identify if there is still more data
+
+            //start reading  the contents
+            //BlobResultSegment result = container.ListBlobsSegmentedAsync(null).Result;
+
+            //foreach (IListBlobItem item in result.Results)
+            //{
+            //    //step 4.1. check the type of the blob : block blob or directory or page block
+            //    if (item.GetType() == typeof(CloudBlockBlob))
+            //    {
+                    //CloudBlockBlob singleblob = (CloudBlockBlob)item;
+                    try
+                    {
+                        List<ServicesEntity> alljobs = new List<ServicesEntity>();
+                TableQuery<ServicesEntity> query = new TableQuery<ServicesEntity>();
+                            //.Where(TableQuery.CombineFilters(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, useremail)
+                            //,
+                            //TableOperators.And,
+                            //      TableQuery.GenerateFilterCondition("imagefilename", QueryComparisons.Equal, singleblob.Name)));
+
+                        TableQuerySegment<ServicesEntity> jobResult = table.ExecuteQuerySegmentedAsync(query, token).Result;
+                        token = jobResult.ContinuationToken;
+
+
+
+
+                        foreach (ServicesEntity job in jobResult.Results)
+                        {
+                            alljobs.Add(job);
+                        }
+                        ServicesEntity rev = alljobs.First();
+
+                        //rev.imagefilename = singleblob.Name + "#" + singleblob.Uri.ToString();
+
+                        jobs.Add(rev);
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        ViewBag.msg = "Technical Error: " + ex.ToString();
+                    }
+                //}
+            //}
+            if (jobs.Count != 0)
+            {
+                return View(jobs); //back to display
+
+            }
+            else
+            {
+                dialogmsg = "Data not found!";
+                return RedirectToAction("AddJobEntity", "JobReport");
+
+            }
+
+        }
 
     }
 }
