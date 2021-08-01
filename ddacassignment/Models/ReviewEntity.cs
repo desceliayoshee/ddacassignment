@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -17,8 +18,9 @@ namespace ddacassignment.Models
 
         public ReviewEntity() { }
 
+        [Required(ErrorMessage = "Must Enter the text fields")]
         public string Content { get; set; }
-
+        [Required(ErrorMessage = "Must Enter the text fields")]
         public string Rating { get; set; }
 
         public IFormFile ImageFilee { get; set; }
