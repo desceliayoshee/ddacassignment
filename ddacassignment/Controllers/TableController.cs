@@ -8,12 +8,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using ddacassignment.Areas.Identity.Data;
 
 namespace ddacassignment.Controllers
 {
     public class TableController : Controller
     {
-        public IActionResult AddSingleEntity(string PartitionKey, string RowKey, DateTime Schedule, double price)
+        public IActionResult AddSingleEntity(string PartitionKey, string RowKey, DateTime Schedule, double price, String customerUsername, bool isbooked, bool isconfirmed)
         {
 
             //refer to the table 
@@ -22,6 +24,10 @@ namespace ddacassignment.Controllers
             ServicesEntity service1 = new ServicesEntity(PartitionKey, RowKey);
             service1.Schedule = Schedule;
             service1.Price = price;
+            service1.customerUsername = "something";
+            service1.isBooked= false;
+            service1.isConfirmed = false;
+
 
             try
             {
@@ -234,6 +240,98 @@ namespace ddacassignment.Controllers
             return RedirectToAction("SearchPage", "Table", new { Message = message});
         }
 
+        private UserManager<ddacassignmentUser> userManager;
+
+        public TableController(UserManager<ddacassignmentUser> usrMan)
+        {
+            userManager = usrMan;
+        }
+        //book 
+        public ActionResult bookdata(string PartitionKey, string RowKey)
+        {
+            CloudTable table = getTableStorageInformation();
+            string errormessage = null;
+
+            //get current username 
+            var myusername = this.userManager.GetUserName(HttpContext.User);
+            try
+            {
+                TableOperation retrieveOperation = TableOperation.Retrieve<ServicesEntity>(PartitionKey, RowKey);
+
+                //Execute the operation
+                TableResult result = table.ExecuteAsync(retrieveOperation).Result;
+
+                //asign the result to item objct
+                ServicesEntity updateEntity = (ServicesEntity)result.Result;
+
+                //change the description 
+                updateEntity.isBooked = true;
+                updateEntity.customerUsername = myusername;
+
+                //create the inssertorreplace tableoperation
+                TableOperation insertorReplaceOperation = TableOperation.InsertOrReplace(updateEntity);
+                var service = result.Result as ServicesEntity;
+                //execute the operation
+                TableResult resultof = table.ExecuteAsync(insertorReplaceOperation).Result;
+                ViewBag.Result = result.HttpStatusCode;
+                return View(resultof);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.msg = "Technical Error: " + ex.ToString();
+            }
+            ViewBag.msg = errormessage;
+
+            return View();
+        }
+
+        //displaybooking 
+        public ActionResult displayresult(string dialogmsg = null)
+        {
+            CloudTable table = getTableStorageInformation();
+            CreateTable();
+            string errormessage = null;
+
+            //get current username
+            var myusername = this.userManager.GetUserName(HttpContext.User);
+            try
+            {
+                TableQuery<ServicesEntity> query = new TableQuery<ServicesEntity>()
+                    .Where(TableQuery.GenerateFilterCondition("customerUsername", QueryComparisons.Equal, myusername));
+                List<ServicesEntity> services = new List<ServicesEntity>();
+                TableContinuationToken token = null;
+                do
+                {
+                    TableQuerySegment<ServicesEntity> result = table.ExecuteQuerySegmentedAsync(query, token).Result;
+                    token = result.ContinuationToken;
+                    foreach (ServicesEntity service in result.Results)
+                    {
+                        services.Add(service);
+                    }
+                }
+                while (token != null);
+
+                if (services.Count != 0)
+                {
+                    return View(services);
+                } 
+                else
+                {
+                    errormessage = "Data not found";
+                    return View(new { dialogmsg = errormessage });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.msg = "Technical Error: " + ex.ToString();
+            }
+            ViewBag.msg = errormessage;
+
+            return View();
+           
+        }
+
         // to display all service (customer)
         public ActionResult ViewService(string PartitionKey, string RowKey)
         {
@@ -278,6 +376,49 @@ namespace ddacassignment.Controllers
             return View();
         }
 
+        // to display all service (driver)
+        public ActionResult ViewServiceStaff(string PartitionKey, string RowKey)
+        {
+            CloudTable table = getTableStorageInformation();
+            CreateTable();
+
+            string errormessage = null;
+
+            //display all info 
+            try
+            {
+                //create query
+                TableQuery<ServicesEntity> query = new TableQuery<ServicesEntity>();
+
+                List<ServicesEntity> services = new List<ServicesEntity>();
+                TableContinuationToken token = null; //to identify if there is still more data
+                do
+                {
+                    TableQuerySegment<ServicesEntity> result = table.ExecuteQuerySegmentedAsync(query, token).Result;
+                    token = result.ContinuationToken;
+
+                    foreach (ServicesEntity service in result.Results)
+                    {
+                        services.Add(service);
+                    }
+                }
+                while (token != null); //token not empty; continue read data
+                if (services.Count != 0)
+                {
+                    return View(services); //back to display
+                }
+                else
+                {
+                    errormessage = "Data not Found";
+                    return RedirectToAction("AddService", "Table", new { dialogmsg = errormessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.msg = "Technical error: " + ex.ToString();
+            }
+            return View();
+        }
 
 
     }

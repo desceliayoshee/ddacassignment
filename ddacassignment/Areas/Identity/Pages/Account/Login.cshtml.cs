@@ -92,11 +92,11 @@ namespace ddacassignment.Areas.Identity.Pages.Account
                     foreach (string userrole in users)
                     {
                         if (String.IsNullOrEmpty(userrole))
-                            return RedirectToAction("Privacy", "Home");
+                            return RedirectToAction("Index", "Home");
                         else if (userrole.Equals("Manager"))
                             return RedirectToAction("Index", "Home");
                         else if (userrole.Equals("Customer"))
-                            return RedirectToAction("Privacy", "Home");
+                            return RedirectToAction("Index", "Home");
                         else if (userrole.Equals("Staff"))
                             return RedirectToAction("Index", "Home");
                     }

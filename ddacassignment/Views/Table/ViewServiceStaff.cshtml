@@ -1,11 +1,9 @@
 ﻿
 @{
-    ViewData["Title"] = "ViewService";
+    ViewData["Title"] = "ViewServiceStaff";
 }
 
 <h1>View Service</h1>
-
-
 
 @if (ViewBag.Message != null)
 {
@@ -19,7 +17,7 @@ else
             <th>Service Company</th>
             <th>Service Schedule</th>
             <th>Service Price</th>
-            <th> Action </th>
+
 
         </tr>
         @foreach (var service in Model)
@@ -29,13 +27,7 @@ else
                 <td>@service.RowKey</td>
                 <td>@service.Schedule</td>
                 <td>@service.Price</td>
-
-                <td><a><button>Book</button></a></td>
-
-                
-
             </tr>
         }
     </table>
 }
-

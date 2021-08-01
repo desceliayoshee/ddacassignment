@@ -23,8 +23,41 @@
             </form>
         </li>
 
-        
+        @if (user.userrole == "Customer")
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="bookdata">Bookings</a>
+            </li>
 
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="ViewService">View Data Service</a>
+            </li>
+        }
+
+        @if (user.userrole == "Manager")
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="bookdata">Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="AddService">View Data Service</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="SearchPage">Search Schedule</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="InsertForm">Service Registration Form</a>
+            </li>
+        }
+        @if (user.userrole == "Staff")
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="bookdata">Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="ViewServiceStaff">View Data Service</a>
+            </li>
+        }
 
     }
     else
