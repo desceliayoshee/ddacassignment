@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using ddacassignment.Areas.Identity.Data;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace ddacassignment.Controllers
 {
@@ -73,6 +74,32 @@ namespace ddacassignment.Controllers
             ViewBag.TableName = table.Name;
             return View();
         }
+
+        //public ActionResult CreateJobTable()
+        //{
+
+        //    //refer to the container
+        //    CloudTable table = getTableStorageInformation();
+        //    ViewBag.Success = table.CreateIfNotExistsAsync().Result;
+        //    ViewBag.TableName = table.Name;
+        //    return View();
+        //}
+
+        //public void CreateJobContainer()
+        //{
+        //    //step 1:call the getBlobStroageInforemation() method  to link with the account
+        //    //refer to the container
+        //    CloudBlobContainer container = getBlobStorageInformation();
+
+        //    //Step 2 : create the contaier if the system found that the name doest exist
+        //    var Success = container.CreateIfNotExistsAsync().Result;
+
+        //    //step 3: collect the container name to display in the frontend
+        //    var BlobContainerName = container.Name;
+
+        //    //4: moodifty view and display the result to the user
+        //    //return View();
+        //}
 
         //to table
         public ActionResult AddService()
@@ -520,6 +547,81 @@ namespace ddacassignment.Controllers
             return RedirectToAction("Index", "Home", new { dialogmsg = errormessage });
 
         }
+
+        //public ActionResult viewAllJobs(string dialogmsg = null)
+        //{
+        //    var userid = this.userManager.GetUserName(HttpContext.User);
+        //    CleaningServiceUser user = userManager.FindByEmailAsync(userid).Result;
+        //    string useremail = user.Email;
+        //    ViewBag.msg = dialogmsg;
+        //    //container information
+        //    CloudBlobContainer container = getBlobStorageInformation();
+
+        //    //table information
+        //    CloudTable table = getStorageInformation();
+
+        //    CreateJobContainer();
+        //    CreateTable();
+
+        //    //create listing for your blob
+        //    List<string> blobs = new List<string>();
+        //    List<Job> jobs = new List<Job>();
+        //    TableContinuationToken token = null; //to identify if there is still more data
+
+        //    //start reading  the contents
+        //    BlobResultSegment result = container.ListBlobsSegmentedAsync(null).Result;
+
+        //    foreach (IListBlobItem item in result.Results)
+        //    {
+        //        //step 4.1. check the type of the blob : block blob or directory or page block
+        //        if (item.GetType() == typeof(CloudBlockBlob))
+        //        {
+        //            CloudBlockBlob singleblob = (CloudBlockBlob)item;
+        //            try
+        //            {
+        //                List<Job> alljobs = new List<Job>();
+        //                TableQuery<Job> query = new TableQuery<Job>()
+        //                    .Where(TableQuery.CombineFilters(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, useremail),
+        //                    TableOperators.And,
+        //                          TableQuery.GenerateFilterCondition("imagefilename", QueryComparisons.Equal, singleblob.Name)));
+
+        //                TableQuerySegment<Job> jobResult = table.ExecuteQuerySegmentedAsync(query, token).Result;
+        //                token = jobResult.ContinuationToken;
+
+
+
+
+        //                foreach (Job job in jobResult.Results)
+        //                {
+        //                    alljobs.Add(job);
+        //                }
+        //                Job rev = alljobs.First();
+
+        //                rev.imagefilename = singleblob.Name + "#" + singleblob.Uri.ToString();
+
+        //                jobs.Add(rev);
+
+        //            }
+        //            catch (Exception ex)
+        //            {
+
+        //                ViewBag.msg = "Technical Error: " + ex.ToString();
+        //            }
+        //        }
+        //    }
+        //    if (jobs.Count != 0)
+        //    {
+        //        return View(jobs); //back to display
+
+        //    }
+        //    else
+        //    {
+        //        dialogmsg = "Data not found!";
+        //        return RedirectToAction("AddJobEntity", "JobReport");
+
+        //    }
+
+        //}
 
     }
 }
