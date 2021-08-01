@@ -22,9 +22,6 @@
         @if (user.userrole == "Customer")
         {
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="bookdata">Bookings</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="viewBooked">Booked</a>
             </li>
             <li class="nav-item">
@@ -56,9 +53,7 @@
 
         @if (user.userrole == "Manager")
         {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="bookdata">Bookings</a>
-            </li>
+
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="AddService">Service List</a>
             </li>
@@ -79,9 +74,6 @@
         }
         @if (user.userrole == "Staff")
         {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="bookdata">Bookings</a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="ViewServiceStaff">Service List</a>
             </li>
