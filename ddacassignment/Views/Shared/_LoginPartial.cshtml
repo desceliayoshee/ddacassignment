@@ -14,9 +14,7 @@
         <li class="nav-item">
             <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @user.User_Full_Name!</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-        </li>
+
 
 
         @if (user.userrole == "Customer")
@@ -87,9 +85,7 @@
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-        </li>
+
         <li class="nav-item">
             <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
         </li>
