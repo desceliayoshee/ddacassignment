@@ -420,6 +420,39 @@ namespace ddacassignment.Controllers
             return View();
         }
 
+        public ActionResult SearchPageManager(String Message = null)
+        {
+            ViewBag.msg = Message;
+            return View();
+        }
+
+        //how to search customer information from table
+        public ActionResult getSearchManager(string PartitionKey, string RowKey)
+        {
+            string message = null;
+            CloudTable table = getTableStorageInformation();
+
+            try
+            {
+                TableOperation retrieveOperation = TableOperation.Retrieve<ServicesEntity>(PartitionKey, RowKey);
+                TableResult tableResult = table.ExecuteAsync(retrieveOperation).Result; //come together ETag
+                if (tableResult.Etag != null)
+                {
+                    var customer = tableResult.Result as ServicesEntity;
+                    return View(customer);
+                }
+                else
+                {
+                    message = "No such service in the list";
+                }
+            }
+            catch (Exception e)
+            {
+                message = "Technical error:" + e.ToString();
+            }
+
+            return RedirectToAction("SearchPage", "Table", new { Message = message });
+        }
 
     }
 }
