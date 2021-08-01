@@ -11,12 +11,13 @@
       "type": "mssql",
       "connectionId": "ddacassignmentNew2Context"
     },
-    "secrets1": {
-      "type": "secrets"
-    },
     "storage1": {
       "type": "storage",
       "connectionId": "ddacassignmentstorage"
+    },
+    "storage2": {
+      "type": "storage",
+      "connectionId": "blobstorageconnection"
     }
   }
 }
