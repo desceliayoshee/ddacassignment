@@ -2,7 +2,36 @@
 @{
     ViewData["Title"] = "ViewServiceStaff";
 }
+<style>
+    body {
+        font-family: 'lato', sans-serif;
+    }
 
+    .container {
+        max-width: 1120px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    th {
+        background-color: #63dfc5;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        padding: 20px;
+    }
+
+    tr {
+        background-color: #ffffff;
+        box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.1);
+    }
+
+    td {
+        padding: 20px;
+    }
+</style>
 <h1>View Service</h1>
 
 @if (ViewBag.Message != null)
@@ -11,22 +40,22 @@
 }
 else
 {
-    <table width=80% border="5">
+    <table border="1">
         <tr>
-            <th>Service Name</th>
-            <th>Service Company</th>
-            <th>Service Schedule</th>
-            <th>Service Price</th>
+            <th style="width:15%"> Service Name</th>
+            <th style="width:15%">Service Company</th>
+            <th style="width:15%">Service Schedule</th>
+            <th style="width:15%">Service Price</th>
 
 
         </tr>
         @foreach (var service in Model)
         {
             <tr>
-                <td>@service.PartitionKey</td>
-                <td>@service.RowKey</td>
-                <td>@service.Schedule</td>
-                <td>@service.Price</td>
+                <td style="width:15%">@service.PartitionKey</td>
+                <td style="width:15%">@service.RowKey</td>
+                <td style="width:15%">@service.Schedule</td>
+                <td style="width:15%">@service.Price</td>
             </tr>
         }
     </table>
