@@ -3,9 +3,37 @@
     ViewData["Title"] = "AddSingleEntity2";
 }
 
-<h1>AddSingleEntity2</h1>
+<h1>Review Added</h1>
 
 <p>
     Insert Single Entity result as Below
     Data is inserted to table @ViewBag.tablename is @(ViewBag.SuccessCode == 204? "successfully!" : " failed! Reason: Maybe data exised!" + @ViewBag.Message)
 </p>
+
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+}
+else
+{
+    <Center>
+        <table width=80% border="5">
+            <tr>
+                <th>Username</th>
+                <th>Service Company</th>
+                <th>Content</th>
+                <th>Rating</th>
+
+            </tr>
+            @foreach (var service in Model)
+            {
+                <tr>
+                    <td>@service.PartitionKey</td>
+                    <td>@service.RowKey</td>
+                    <td>@service.Content</td>
+                    <td>@service.Rating</td>
+                </tr>
+            }
+        </table>
+    </Center>
+}

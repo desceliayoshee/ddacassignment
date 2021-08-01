@@ -9,10 +9,10 @@ namespace ddacassignment.Models
 {
     public class ReviewEntity : TableEntity
     {
-        public ReviewEntity(string review, string fileName)
+        public ReviewEntity(string userName, string serviceCompany)
         {
-            this.PartitionKey = review;
-            this.RowKey = fileName;
+            this.PartitionKey = userName;
+            this.RowKey = serviceCompany;
         }
 
         public ReviewEntity() { }

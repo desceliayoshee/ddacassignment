@@ -3,13 +3,13 @@
     ViewData["Title"] = "DisplayAllImages";
 }
 
-<h1>Display Images</h1>
+<h1>Display All Images</h1>
 
 <ul>
-    @foreach(var item in Model) // model = listblob
+@*    @foreach(var item in Model) // model = listblob
      {
         <li>@item</li>
-     }
+     }*@
 </ul>
 
 <br />
@@ -26,10 +26,14 @@
         &nbsp; &nbsp;&nbsp;
         <label style="color:red">@imageinformation[0]</label>
         &nbsp; &nbsp;&nbsp;
-        <a asp-action="deleteblob" asp-route-imagename="@imageinformation[0]"> Delete</a>
-        &nbsp; &nbsp;&nbsp;
-        <a asp-action="deleteblob" asp-route-imagename="@imageinformation[0]"> Download</a>
+        
+        <a asp-action="DownloadImage" asp-route-imagename="@imageinformation[0]"> Download</a>
 
     </li>
      }
 </ul>
+
+@if(ViewBag.msg != null)
+            {
+                <script>alert("@ViewBag.msg");</script>
+            }

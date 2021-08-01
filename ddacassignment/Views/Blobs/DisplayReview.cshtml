@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewData["Title"] = "DisplayReview";
+}
+
+<h1>DisplayReview</h1>
+
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+}
+else
+{
+<Center>
+    <table width=80% border="5">
+        <tr>
+            <th>Username</th>
+            <th>Service Company</th>
+            <th>Content</th>
+            <th>Rating</th>
+
+        </tr>
+        @foreach (var service in Model)
+        {
+            <tr>
+                <td>@service.PartitionKey</td>
+                <td>@service.RowKey</td>
+                <td>@service.Content</td>
+                <td>@service.Rating</td>
+            </tr>
+        }
+    </table>
+</Center>
+}

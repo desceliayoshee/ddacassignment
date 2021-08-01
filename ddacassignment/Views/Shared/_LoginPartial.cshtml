@@ -39,8 +39,16 @@
                 <a class="nav-link text-dark" asp-area="" asp-controller="Blobs" asp-action="AddNewReview">Add Review</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Blobs" asp-action="DisplayAllImages">Images</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Blobs" asp-action="DisplayReview">View Review</a>
+            </li>
+            
+            <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Table" asp-action="SearchPage">Search Schedule</a>
             </li>
+
         }
 
         @if (user.userrole == "Manager")

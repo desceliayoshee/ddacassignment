@@ -209,21 +209,20 @@ namespace ddacassignment.Controllers
                 review.Content = Content;
                 review.Rating = Rating;
                 
-                try
-                {
-                    TableOperation insertOperation = TableOperation.Insert(review);
-                    TableResult result = table.ExecuteAsync(insertOperation).Result;
+            try
+            {
+                TableOperation insertOperation = TableOperation.Insert(review);
+                TableResult result = table.ExecuteAsync(insertOperation).Result;
 
-                    ViewBag.TableName = table.Name;
-                    ViewBag.SuccessCode = result.HttpStatusCode;
-                    /*return View(result);*/
-                }
-                catch (Exception ex)
-                {
-                    ViewBag.Message = "Errornya di: " + ex.ToString();
-                }
+                ViewBag.TableName = table.Name;
+                ViewBag.SuccessCode = result.HttpStatusCode;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Errornya di: " + ex.ToString();
+            }
 
-            return View();
+            return RedirectToAction("DisplayReview");
         }
 
         public ActionResult ViewAllReview(string dialogmsg = null)
@@ -280,8 +279,9 @@ namespace ddacassignment.Controllers
         }
 
         // 8 
-        public ActionResult DisplayAllImages()
+        public ActionResult DisplayAllImages(string Message = null)
         {
+            ViewBag.msg = Message;
             CloudBlobContainer container = getCloudContainerInformation();
 
             //create empty list
@@ -305,6 +305,72 @@ namespace ddacassignment.Controllers
             }
 
             return View(listblob);
+        }
+
+        // 9
+        public ActionResult DownloadImage(string imagename)
+        {
+            string message = null;
+            CloudBlobContainer container = getCloudContainerInformation();
+            CloudBlockBlob blob = container.GetBlockBlobReference(imagename);
+
+            try
+            {
+                var outputitem = System.IO.File.OpenWrite(@"C:\\Users\\Guest123\\Desktop\\" + imagename);
+                blob.DownloadToStreamAsync(outputitem).Wait();
+                outputitem.Close();
+                message = imagename + " already download from blob storage!";
+            }
+            catch(Exception ex)
+            {
+                message = imagename + " unable to be downloaded due to: " + ex.ToString();
+            }
+
+            return RedirectToAction("DisplayAllImages", "Blobs", new { Message = message });
+        }
+
+        //10
+        public ActionResult DisplayReview(string PartitionKey, string RowKey)
+        {
+            CloudTable table = getTableStorageInformation();
+            CreateReviewTable();
+
+            string errormessage = null;
+
+            //display all info 
+            try
+            {
+                //create query
+                TableQuery<ReviewEntity> query = new TableQuery<ReviewEntity>();
+
+                List<ReviewEntity> rev = new List<ReviewEntity>();
+                TableContinuationToken token = null; //to identify if there is still more data
+                do
+                {
+                    TableQuerySegment<ReviewEntity> result = table.ExecuteQuerySegmentedAsync(query, token).Result;
+                    token = result.ContinuationToken;
+
+                    foreach (ReviewEntity reviews in result.Results)
+                    {
+                        rev.Add(reviews);
+                    }
+                }
+                while (token != null);
+                if (rev.Count != 0)
+                {
+                    return View(rev);
+                }
+                else
+                {
+                    errormessage = "Data not Found";
+                    return RedirectToAction("AddService", "Table", new { dialogmsg = errormessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.msg = "Technical error: " + ex.ToString();
+            }
+            return View();
         }
     }
 }
