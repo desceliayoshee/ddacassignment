@@ -247,7 +247,7 @@ namespace ddacassignment.Controllers
             userManager = usrMan;
         }
         //book 
-        public ActionResult bookdata(string PartitionKey, string RowKey)
+        public ActionResult bookdata(string Pkey, string RKey)
         {
             CloudTable table = getTableStorageInformation();
             string errormessage = null;
@@ -256,25 +256,32 @@ namespace ddacassignment.Controllers
             var myusername = this.userManager.GetUserName(HttpContext.User);
             try
             {
-                TableOperation retrieveOperation = TableOperation.Retrieve<ServicesEntity>(PartitionKey, RowKey);
+                TableOperation retrieveOperation = TableOperation.Retrieve<ServicesEntity>(Pkey, RKey);
 
                 //Execute the operation
                 TableResult result = table.ExecuteAsync(retrieveOperation).Result;
+                if (result.Etag != null)
+                {
+                    //asign the result to item objct
+                    ServicesEntity updateEntity = (ServicesEntity)result.Result;
 
-                //asign the result to item objct
-                ServicesEntity updateEntity = (ServicesEntity)result.Result;
+                    //change the description 
+                    updateEntity.isBooked = true;
+                    updateEntity.customerUsername = myusername;
+                    updateEntity.isConfirmed = true;
 
-                //change the description 
-                updateEntity.isBooked = true;
-                updateEntity.customerUsername = myusername;
-                 
-                //create the inssertorreplace tableoperation
-                TableOperation insertorReplaceOperation = TableOperation.InsertOrReplace(updateEntity);
-                var service = result.Result as ServicesEntity;
-                //execute the operation
-                TableResult resultof = table.ExecuteAsync(insertorReplaceOperation).Result;
-                ViewBag.Result = result.HttpStatusCode;
-                return View(resultof);
+                    //create the inssertorreplace tableoperation
+                    TableOperation insertorReplaceOperation = TableOperation.InsertOrReplace(updateEntity);
+                    var service = result.Result as ServicesEntity;
+                    //execute the operation
+                    TableResult resultof = table.ExecuteAsync(insertorReplaceOperation).Result;
+                    // ViewBag.Result = result.HttpStatusCode;
+                    return View(resultof);
+                }
+                else//no message found
+                {
+                    errormessage = "Error message";
+                }
             }
             catch (Exception ex)
             {

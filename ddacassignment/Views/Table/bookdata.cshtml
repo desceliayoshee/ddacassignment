@@ -36,36 +36,38 @@
 @if (ViewBag.Message != null)
 {
 
-<p>@ViewBag.Message</p> }
+    <p>@ViewBag.Message</p> }
 
-            else
-            {
-            <table border="1">
-                <tr>
+else
+{
+<table border="1">
+    <tr>
 
-                    <th style="width:15%">Service Name</th>
-                    <th style="width:15%">Company name</th>
-                    <th style="width:15%">Schedule</th>
-                    <th style="width:15%">Price</th>
-                    <th style="width:15%">Customer Name</th>
-                    <th style="width:15%">Confirmed</th>
-
-
-                </tr>
-
-                <tr>
-                    @{ var displayresult = Model.Result as ddacassignment.Models.ServicesEntity;}
-
-                    <td style="width:15%">@displayresult.PartitionKey</td>
-                    <td style="width:15%">@displayresult.RowKey</td>
-                    <td style="width:15%">@displayresult.Schedule</td>
-                    <td style="width:15%">@displayresult.Price</td>
-                    <td style="width:15%">@displayresult.customerUsername</td>
-                    <td style="width:15%">@displayresult.isConfirmed</td>
+        <th style="width:15%">Service Name</th>
+        <th style="width:15%">Company name</th>
+        <th style="width:15%">Schedule</th>
+        <th style="width:15%">Price</th>
+        <th style="width:15%">Customer Name</th>
+        <th style="width:15%">Confirmed</th>
+        <th style="width:15%">Booked </th>
 
 
+    </tr>
 
-                </tr>
+    <tr>
+        @{ var displayresult = Model.Result as ddacassignment.Models.ServicesEntity;}
+
+        <td style="width:15%">@displayresult.PartitionKey</td>
+        <td style="width:15%">@displayresult.RowKey</td>
+        <td style="width:15%">@displayresult.Schedule</td>
+        <td style="width:15%">@displayresult.Price</td>
+        <td style="width:15%">@displayresult.customerUsername</td>
+        <td style="width:15%">@displayresult.isConfirmed</td>
+        <td style="width:15%">@displayresult.isBooked </td>
+
+
+
+    </tr>
 
 
 
