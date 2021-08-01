@@ -18,6 +18,7 @@ namespace ddacassignment.Models
         
        
         public DateTime Schedule { get; set; }
+
         public double Price { get; set; }
 
         public string customerUsername { get; set; }

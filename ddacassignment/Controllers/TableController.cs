@@ -270,7 +270,7 @@ namespace ddacassignment.Controllers
 
                 //create the inssertorreplace tableoperation
                 TableOperation insertorReplaceOperation = TableOperation.InsertOrReplace(updateEntity);
-
+                var service = result.Result as ServicesEntity;
                 //execute the operation
                 TableResult resultof = table.ExecuteAsync(insertorReplaceOperation).Result;
                 ViewBag.Result = result.HttpStatusCode;
@@ -283,6 +283,53 @@ namespace ddacassignment.Controllers
             ViewBag.msg = errormessage;
 
             return View();
+        }
+
+        //displaybooking 
+        public ActionResult displayresult(string dialogmsg = null)
+        {
+            CloudTable table = getTableStorageInformation();
+            CreateTable();
+            string errormessage = null;
+
+            //get current username
+            var myusername = this.userManager.GetUserName(HttpContext.User);
+            try
+            {
+                TableQuery<ServicesEntity> query = new TableQuery<ServicesEntity>()
+                    .Where(TableQuery.GenerateFilterCondition("customerUsername", QueryComparisons.Equal, myusername));
+                List<ServicesEntity> services = new List<ServicesEntity>();
+                TableContinuationToken token = null;
+                do
+                {
+                    TableQuerySegment<ServicesEntity> result = table.ExecuteQuerySegmentedAsync(query, token).Result;
+                    token = result.ContinuationToken;
+                    foreach (ServicesEntity service in result.Results)
+                    {
+                        services.Add(service);
+                    }
+                }
+                while (token != null);
+
+                if (services.Count != 0)
+                {
+                    return View(services);
+                } 
+                else
+                {
+                    errormessage = "Data not found";
+                    return View(new { dialogmsg = errormessage });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.msg = "Technical Error: " + ex.ToString();
+            }
+            ViewBag.msg = errormessage;
+
+            return View();
+           
         }
 
         // to display all service (customer)
