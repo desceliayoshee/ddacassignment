@@ -267,7 +267,7 @@ namespace ddacassignment.Controllers
                 //change the description 
                 updateEntity.isBooked = true;
                 updateEntity.customerUsername = myusername;
-
+                 
                 //create the inssertorreplace tableoperation
                 TableOperation insertorReplaceOperation = TableOperation.InsertOrReplace(updateEntity);
                 var service = result.Result as ServicesEntity;
