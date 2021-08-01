@@ -74,7 +74,7 @@ namespace ddacassignment.Controllers
             return View();
         }
 
-        // 3 
+        // 
         public String UploadImage()
         {
             CloudBlobContainer container = getCloudContainerInformation();
@@ -93,7 +93,7 @@ namespace ddacassignment.Controllers
             return blobItem.Name + " is successfully uploaded to Blob Storage. The URL is: " + blobItem.Uri;
         }
 
-        // 4
+        // 3
         public ActionResult UploadFiles(string Message = null)
         {
             ViewBag.msg = Message;
@@ -127,21 +127,19 @@ namespace ddacassignment.Controllers
             return RedirectToAction("UploadFiles", "Blobs", new { Message = message });
         }
 
+        
         public ActionResult AddReview()
         {
             return View();
         }
+
+        // 4
         public ActionResult AddNewReview()
         {
             return View();
         }
 
         // 5
-        public ActionResult DisplayImage()
-        {
-            return null;
-        }
-
         public ActionResult CreateReviewTable()
         {
 
@@ -180,6 +178,9 @@ namespace ddacassignment.Controllers
             }
             return View();
         }
+
+
+        // 7
         [HttpPost]
         public ActionResult AddSingleEntity2(string PartitionKey, string RowKey, string Content, string Rating, string ImageFileName, IFormFile img)
         {
@@ -277,38 +278,33 @@ namespace ddacassignment.Controllers
                 return RedirectToAction("", "Review");
             }
         }
-    }
-}
 
-/*try
-{
-    //create query
-    TableQuery<ServicesEntity> query = new TableQuery<ServicesEntity>();
-
-    List<ServicesEntity> services = new List<ServicesEntity>();
-    TableContinuationToken token = null; //to identify if there is still more data
-    do
-    {
-        TableQuerySegment<ServicesEntity> result = table.ExecuteQuerySegmentedAsync(query, token).Result;
-        token = result.ContinuationToken;
-
-        foreach (ServicesEntity service in result.Results)
+        // 8 
+        public ActionResult DisplayAllImages()
         {
-            services.Add(service);
+            CloudBlobContainer container = getCloudContainerInformation();
+
+            //create empty list
+            List<string> listblob = new List<string>();
+
+            //retrieve all the blob item from blob storage
+            BlobResultSegment items = container.ListBlobsSegmentedAsync(null).Result;
+
+            foreach(IListBlobItem item in items.Results)
+            {
+                //Blocb Blob (image, audio, video, file)
+                if(item.GetType() == typeof(CloudBlockBlob))
+                {
+                    CloudBlockBlob singleblob = (CloudBlockBlob)item;
+                    if(Path.GetExtension(singleblob.Name) == ".jpg" || Path.GetExtension(singleblob.Name) == ".png")
+                    {
+                        // # is for delimiter
+                        listblob.Add(singleblob.Name + "#" + singleblob.Uri);
+                    }
+                }
+            }
+
+            return View(listblob);
         }
     }
-    while (token != null); //token not empty; continue read data
-    if (services.Count != 0)
-    {
-        return View(services); //back to display
-    }
-    else
-    {
-        errormessage = "Data not Found";
-        return RedirectToAction("AddService", "Table", new { dialogmsg = errormessage });
-    }
 }
-catch (Exception ex)
-{
-    ViewBag.msg = "Technical error: " + ex.ToString();
-}*/

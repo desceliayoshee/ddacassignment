@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewData["Title"] = "DisplayAllImages";
+}
+
+<h1>Display Images</h1>
+
+<ul>
+    @foreach(var item in Model) // model = listblob
+     {
+        <li>@item</li>
+     }
+</ul>
+
+<br />
+<br />
+<br />
+
+<h2>Images</h2>
+<ul>
+    @foreach (var item in Model)
+     {
+        string[] imageinformation = item.Split('#');
+    <li>
+        <img src="@imageinformation[1]" width="200" height="150" />
+        &nbsp; &nbsp;&nbsp;
+        <label style="color:red">@imageinformation[0]</label>
+        &nbsp; &nbsp;&nbsp;
+        <a asp-action="deleteblob" asp-route-imagename="@imageinformation[0]"> Delete</a>
+        &nbsp; &nbsp;&nbsp;
+        <a asp-action="deleteblob" asp-route-imagename="@imageinformation[0]"> Download</a>
+
+    </li>
+     }
+</ul>
