@@ -461,5 +461,65 @@ namespace ddacassignment.Controllers
             return RedirectToAction("SearchPage", "Table", new { Message = message });
         }
 
+        public ActionResult viewBooked(string dialogmsg = null)
+        {
+            ViewBag.msg = dialogmsg;
+
+            CloudTable table = getTableStorageInformation();
+            CreateTable();
+
+            string errormessage = null;
+
+            //get current username
+            var myusername = this.userManager.GetUserName(HttpContext.User);
+
+            //diaplay all  the data information in a table
+            try
+            {
+                //create query
+                TableQuery<ServicesEntity> query = new TableQuery<ServicesEntity>()
+                    .Where(TableQuery.GenerateFilterCondition("customerUsername", QueryComparisons.Equal, myusername));
+
+                List<ServicesEntity> booklist = new List<ServicesEntity>();
+                TableContinuationToken token = null; //to identify if there is still more data
+                do
+                {
+                    TableQuerySegment<ServicesEntity> result = table.ExecuteQuerySegmentedAsync(query, token).Result;
+                    token = result.ContinuationToken;
+
+                    foreach (ServicesEntity slot in result.Results)
+                    {
+                        booklist.Add(slot);
+                    }
+                }
+                while (token != null); //token not emplty; continue read data
+
+                if (booklist.Count != 0)
+                {
+                    return View(booklist); //back to display
+
+                }
+                else
+                {
+                    //ViewBag.msg = "You have no bookingd yet";
+                    errormessage = "No  booked slots ";
+                    return RedirectToAction("Index", "Home", new { dialogmsg = errormessage });
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.msg = "Technical Error: " + ex.ToString();
+                errormessage = "No  booked slots ";
+                return RedirectToAction("Index", "Home", new { dialogmsg = errormessage });
+            }
+
+            ViewBag.msg = dialogmsg;
+            errormessage = "No  booked slots ";
+            return RedirectToAction("Index", "Home", new { dialogmsg = errormessage });
+
+        }
+
     }
 }
