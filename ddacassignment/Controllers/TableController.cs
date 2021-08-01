@@ -260,10 +260,10 @@ namespace ddacassignment.Controllers
                         services.Add(service);
                     }
                 }
-                while (token != null); //token not empty; continue read data
+                while (token != null); 
                 if (services.Count != 0)
                 {
-                    return View(services); //back to display
+                    return View(services);
                 }
                 else
                 {
@@ -277,6 +277,7 @@ namespace ddacassignment.Controllers
             }
             return View();
         }
+
 
 
     }
