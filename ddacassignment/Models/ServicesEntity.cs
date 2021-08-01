@@ -8,15 +8,15 @@ namespace ddacassignment.Models
 {
     public class ServicesEntity : TableEntity
     {
-        public ServicesEntity() { }
+       
         public ServicesEntity(String service , string company)
         {
             this.PartitionKey = service;
             this.RowKey = company;
         }
 
-        
-       
+        public ServicesEntity() { }
+
         public DateTime Schedule { get; set; }
 
         public double Price { get; set; }
