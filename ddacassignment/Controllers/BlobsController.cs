@@ -187,23 +187,6 @@ namespace ddacassignment.Controllers
 
             //refer to the table 
             CloudTable table = getTableStorageInformation();
-            /*CloudBlobContainer container = getCloudContainerInformation();*/
-
-            /*CreateContainer();
-            CreateReviewTable();*/
-
-            // error nya disini ternyata
-            /*var myusername = this.userManager.GetUserName(HttpContext.User);
-
-            PartitionKey = myusername;*/
-
-
-                /*CloudBlockBlob blobItem = container.GetBlockBlobReference(img.FileName);
-                var stream = img.OpenReadStream();
-                blobItem.UploadFromStreamAsync(stream).Wait();
-
-                ImageFileName = img.FileName;*/
-
                 ReviewEntity review = new ReviewEntity(PartitionKey, RowKey);
 
                 review.Content = Content;
