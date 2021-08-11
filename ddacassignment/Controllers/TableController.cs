@@ -564,7 +564,8 @@ namespace ddacassignment.Controllers
             {
                 //create query
                 TableQuery<ServicesEntity> query = new TableQuery<ServicesEntity>()
-                    .Where(TableQuery.CombineFilters(TableQuery.GenerateFilterConditionForBool("isBooked", QueryComparisons.Equal, true), TableOperators.And, TableQuery.GenerateFilterConditionForBool("isConfirmed", QueryComparisons.Equal, true)));
+                    .Where(TableQuery.CombineFilters(TableQuery.GenerateFilterConditionForBool("isBooked", QueryComparisons.Equal, true), 
+                    TableOperators.And, TableQuery.GenerateFilterConditionForBool("isConfirmed", QueryComparisons.Equal, true)));
 
                 List<ServicesEntity> booklist = new List<ServicesEntity>();
                 TableContinuationToken token = null; //to identify if there is still more data

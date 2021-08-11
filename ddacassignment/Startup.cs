@@ -42,6 +42,7 @@ namespace ddacassignment
                 builder.AddBlobServiceClient(Configuration["ConnectionStrings:ddacassignmentstorage:blob"], preferMsi: true);
                 builder.AddQueueServiceClient(Configuration["ConnectionStrings:ddacassignmentstorage:queue"], preferMsi: true);
             });
+            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
         }
 
 

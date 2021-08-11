@@ -18,6 +18,9 @@
     "storage2": {
       "type": "storage",
       "connectionId": "blobstorageconnection"
+    },
+    "appInsights1": {
+      "type": "appInsights"
     }
   }
 }

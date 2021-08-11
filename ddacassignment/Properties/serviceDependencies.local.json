@@ -22,6 +22,9 @@
       "type": "storage.azure",
       "connectionId": "blobstorageconnection",
       "secretStore": null
+    },
+    "appInsights1": {
+      "type": "appInsights.sdk"
     }
   }
 }
