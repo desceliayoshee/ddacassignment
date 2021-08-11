@@ -24,7 +24,10 @@
       "secretStore": null
     },
     "appInsights1": {
-      "type": "appInsights.sdk"
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/microsoft.insights/components/wastemanagement",
+      "type": "appInsights.azure",
+      "connectionId": "APPINSIGHTS_CONNECTIONSTRING",
+      "secretStore": "LocalSecretsFile"
     }
   }
 }

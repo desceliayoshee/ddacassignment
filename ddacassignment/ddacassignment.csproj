@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>978aee46-ad63-43ce-92d2-33d7a903f5fe</UserSecretsId>
-    <ApplicationInsightsResourceId>/subscriptions/01a25d56-23a8-463d-adbf-6b84ab448549/resourceGroups/test1/providers/microsoft.insights/components/ddacasssignment</ApplicationInsightsResourceId>
+    <ApplicationInsightsResourceId>/subscriptions/09932adc-bdcd-46cc-b4ee-40f8393b51f6/resourceGroups/ddacassignment/providers/microsoft.insights/components/wastemanagement</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>

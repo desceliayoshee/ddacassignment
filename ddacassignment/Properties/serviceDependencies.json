@@ -1,15 +1,23 @@
 {
   "dependencies": {
-    "mssql1": {
-      "type": "mssql",
-      "connectionId": "ddacassignmentContextConnection"
-    },
     "secrets1": {
       "type": "secrets"
     },
     "mssql3": {
       "type": "mssql",
       "connectionId": "ddacassignmentNew2Context"
+    },
+    "appInsights1": {
+      "type": "appInsights",
+      "connectionId": "APPINSIGHTS_CONNECTIONSTRING"
+    },
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "ddacassignmentContextConnection"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ddacassignmentNewContext"
     },
     "storage1": {
       "type": "storage",

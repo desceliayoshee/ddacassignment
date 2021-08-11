@@ -1,0 +1,40 @@
+{
+  "dependencies": {
+    "appInsights1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/microsoft.insights/components/wastemanagement",
+      "type": "appInsights.azure",
+      "connectionId": "APPINSIGHTS_CONNECTIONSTRING",
+      "secretStore": "AzureAppSettings"
+    },
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/ddacassignmentdbserver/databases/ddacassignment_db",
+      "type": "mssql.azure",
+      "connectionId": "ddacassignmentContextConnection",
+      "secretStore": "AzureAppSettings"
+    },
+    "mssql2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/ddacassignmentdbserver/databases/ddacassignment_db",
+      "type": "mssql.azure",
+      "connectionId": "ddacassignmentNewContext",
+      "secretStore": "AzureAppSettings"
+    },
+    "storage1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/ddacassignmentstorages",
+      "type": "storage.azure",
+      "connectionId": "ddacassignmentstorage",
+      "secretStore": "AzureAppSettings"
+    },
+    "storage2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/ddacassignmentstorages",
+      "type": "storage.azure",
+      "connectionId": "blobstorageconnection",
+      "secretStore": "AzureAppSettings"
+    },
+    "storage3": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/ddacassignmentstorages",
+      "type": "storage.azure",
+      "connectionId": "TableStorageConnection",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}
