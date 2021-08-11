@@ -14,22 +14,22 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">Username</label>
-                <input asp-for="PartitionKey" class="form-control" />
+                <input asp-for="PartitionKey" class="form-control" required />
                 <span asp-validation-for="PartitionKey" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Service Company</label>
-                <input asp-for="RowKey" class="form-control" />
+                <input asp-for="RowKey" class="form-control" required />
                 <span asp-validation-for="RowKey" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Content" class="control-label"></label>
-                <textarea asp-for="Content" class="form-control" rows="4" cols="50"></textarea>
+                <textarea asp-for="Content" class="form-control" rows="4" cols="50" required></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Rating" class="control-label"></label>
-                <input asp-for="Rating" class="form-control" />
+                <input asp-for="Rating" class="form-control" required/>
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
 
