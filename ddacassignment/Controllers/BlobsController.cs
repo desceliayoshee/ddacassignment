@@ -299,7 +299,7 @@ namespace ddacassignment.Controllers
 
             try
             {
-                var outputitem = System.IO.File.OpenWrite(@"C:\\Users\\Guest123\\Desktop\\" + imagename);
+                var outputitem = System.IO.File.OpenWrite(@"C:\\Users\\Louis\\Desktop\\" + imagename);
                 blob.DownloadToStreamAsync(outputitem).Wait();
                 outputitem.Close();
                 message = imagename + " already download from blob storage!";
